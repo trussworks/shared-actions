@@ -19,8 +19,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Restore cache
         uses: actions/cache@v3
