@@ -1,0 +1,37 @@
+name: validate
+
+on:
+  workflow_call:
+    # inputs:
+    #   username:
+    #     required: true
+    #     type: string
+    # workflows in the same organization or enterprise can use the inherit keyword to implicitly pass the secrets.
+    secrets: inherit
+
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container:
+      image: trussworks/circleci:56d41758666174506ef9a98769e448c63acc2045
+    steps:
+      - name: Check out code
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          key: pre-commit-dot-cache-{{ checksum ".pre-commit-config.yaml" }}
+
+      - name: Run pre-commit tests
+        id: yarn-cache-dir-path
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Save cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-dot-cache-{{ checksum ".pre-commit-config.yaml" }}
