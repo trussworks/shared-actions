@@ -3,8 +3,6 @@ name: validate
 on:
   workflow_call:
     # workflows in the same organization or enterprise can use the inherit keyword to implicitly pass the secrets.
-    secrets: inherit
-
 
 jobs:
   validate:
