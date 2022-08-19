@@ -2,7 +2,6 @@ name: validate
 
 on:
   workflow_call:
-    # workflows in the same organization or enterprise can use the inherit keyword to implicitly pass the secrets.
 
 jobs:
   validate:
@@ -13,13 +12,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-
       - name: Cache
         uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-dot-cache-{{ hashFiles(.pre-commit-config.yaml') }}
-
       - name: Run pre-commit tests
         id: yarn-cache-dir-path
         run: pre-commit run --all-files --show-diff-on-failure
