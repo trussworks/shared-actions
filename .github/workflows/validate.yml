@@ -15,12 +15,12 @@ jobs:
           pip install pre-commit
       - name: Set up Go
         uses: actions/setup-go@v3
-      - name: Run GoReleaser
+      - name: Install GoReleaser
         uses: goreleaser/goreleaser-action@v3
         with:
-          distribution: goreleaser
-          version: latest
-          args: release --rm-dist
+          install-only: true
+      - name: Show GoReleaser version
+        run: goreleaser -v
       - name: Cache
         uses: actions/cache@v3
         with:
