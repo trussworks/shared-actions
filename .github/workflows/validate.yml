@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latgest
     steps:
       - name: Check out code
         uses: actions/checkout@v3
