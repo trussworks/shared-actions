@@ -1,0 +1,45 @@
+name: terratest
+
+on:
+  workflow_call:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Install pre-commit
+        run: |
+          brew install terraform-docs
+          pip install pre-commit
+      - name: Restore Pre-Commit Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-dot-cache-{{ hashFiles(.pre-commit-config.yaml') }}
+      - name: Restore Go Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: go-mod-sources-v1-{{ hashFiles('go.sum') }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::313564602749:role/circleci
+          aws-region: us-east-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-session-name: circleci
+      - name: Run terratest
+        run: make test
+      - name: Save Pre-Commit Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-dot-cache-{{ hashFiles(.pre-commit-config.yaml') }}
+      - name: Save Go Cache
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: go-mod-sources-v1-{{ hashFiles('go.sum') }}
