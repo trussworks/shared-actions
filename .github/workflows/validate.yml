@@ -9,9 +9,11 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-      - name: Install pre-commit
+      - name: Place Homebrew on PATH
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+      - name: Install pre-commit
+        run: |
           brew install terraform-docs
           pip install pre-commit
       - name: Set up Go
