@@ -9,11 +9,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-      - name: Place Homebrew on PATH
-        run: |
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
       - name: Install pre-commit
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install terraform-docs
           pip install pre-commit
       - name: Set up Go
@@ -30,4 +28,6 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-dot-cache-{{ hashFiles(.pre-commit-config.yaml') }}
       - name: Pre-commit checks
-        run: pre-commit run --all-files --show-diff-on-failure
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          pre-commit run --all-files --show-diff-on-failure
