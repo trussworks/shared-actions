@@ -37,13 +37,3 @@ jobs:
           role-session-name: circleci
       - name: Run terratest
         run: make test
-      - name: Save Pre-Commit Cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-dot-cache-{{ hashFiles(.pre-commit-config.yaml') }}
-      - name: Save Go Cache
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: go-mod-sources-v1-{{ hashFiles('go.sum') }}
