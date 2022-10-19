@@ -2,6 +2,12 @@ name: validate
 
 on:
   workflow_call:
+    inputs:
+      go-version:
+        type: string
+        required: false
+        description: "The version of Go to be installed"
+        default: "1.17.13"
 
 jobs:
   validate:
@@ -16,6 +22,8 @@ jobs:
           pip install pre-commit
       - name: Set up Go
         uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go-version }}
       - name: Install GoReleaser
         uses: goreleaser/goreleaser-action@v3
         with:
