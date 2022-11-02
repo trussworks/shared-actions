@@ -7,7 +7,7 @@ on:
         type: string
         required: false
         description: "The version of Go to be installed"
-        default: "1.17.13"
+        default: "1.19.2"
 
 jobs:
   validate:
