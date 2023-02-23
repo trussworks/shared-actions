@@ -1,0 +1,31 @@
+name: validate
+
+on:
+  workflow_call:
+    inputs:
+      go-version:
+        type: string
+        required: false
+        description: "The version of Go to be installed"
+        default: "1.19.2"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Install pre-commit
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install terraform-docs
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ inputs.go-version }}
+      - name: Install GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          install-only: true
+      - name: Show GoReleaser version
+        run: goreleaser -v
