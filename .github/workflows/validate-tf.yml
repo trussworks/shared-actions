@@ -1,0 +1,20 @@
+name: Validate - Terraform
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate-tf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pre-commit/action@v3.0.0
+      - name: Commit changes from pre-commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: Show GitHub Actions logo
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          add: "*.md"
