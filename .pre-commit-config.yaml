@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
+    rev: v4.4.0
     hooks:
       - id: check-json
       - id: check-merge-conflict
@@ -13,12 +13,6 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.31.1
+    rev: v0.33.0
     hooks:
       - id: markdownlint
-
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.75.0
-    hooks:
-      - id: terraform_docs
-      - id: terraform_fmt
