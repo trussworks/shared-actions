@@ -1,6 +1,7 @@
 name: Validate - Terraform
 
 on:
+  workflow_called:
   pull_request:
   push:
     branches: [main]
