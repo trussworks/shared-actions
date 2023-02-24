@@ -11,15 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install terraform-docs
-        run: |
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          HOMEBREW_NO_INSTALL_CLEANUP=1 brew install terraform-docs
-      - uses: pre-commit/action@v3.0.0
-      - name: Commit changes from pre-commit
-        uses: EndBug/add-and-commit@v9
+      - name: Render terraform docs and push changes back to PR
+        uses: terraform-docs/gh-actions@main
         with:
-          message: Show GitHub Actions logo
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          add: "*.md"
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+      - uses: pre-commit/action@v3.0.0
