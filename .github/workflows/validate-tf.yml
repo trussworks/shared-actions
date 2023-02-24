@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install terraform-docs
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install terraform-docs
       - uses: pre-commit/action@v3.0.0
       - name: Commit changes from pre-commit
         uses: EndBug/add-and-commit@v9
