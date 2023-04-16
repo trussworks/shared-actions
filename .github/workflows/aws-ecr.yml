@@ -1,0 +1,67 @@
+# In order to utilize this workflow, you must have OpenID Connect already set up in AWS.
+# See https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+# The following GitHub repository secrets must be present:
+#     - GHA_ECR_ROLE_ASSUMPTION
+#     - ECR_REPOSITORY
+
+name: Automate Docker Build Push to AWS ECR
+
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "**.md**"
+    branches: [main]
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push-dev-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # tag=v3.5.2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # tag=v2
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ secrets.GHA_ECR_ROLE_ASSUMPTION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@2f9f10ea3fa2eed41ac443fee8bfbd059af2d0a4 # tag=v1.6.0
+
+      - name: Construct image URI
+        id: construct-image-uri
+        env:
+          GIT_BRANCH: ${{ github.ref_name }}
+          GIT_COMMIT: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
+        shell: bash
+        run: |
+          BRANCH_PREFIX="$GIT_BRANCH"
+          # use a generic prefix for all non-main branches
+          if [[ "$BRANCH_PREFIX" != "main" ]]; then
+            BRANCH_PREFIX="branch"
+          fi
+          BUILD_TIME=$(date '+%Y%m%d%H%M%S')
+          IMAGE_TAG="${BRANCH_PREFIX}-${GIT_COMMIT}-${BUILD_TIME}"
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+
+      - uses: docker/setup-buildx-action@dc7b9719a96d48369863986a06765841d7ea23f6 # tag=v2
+        id: buildx
+        with:
+          install: true
+
+      - name: Build and push
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # tag=v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.construct-image-uri.outputs.image-uri }}
+          build-args: |
+            BUILD=${{ github.sha }}
+          provenance: false
