@@ -18,3 +18,29 @@ Run the following commands to make sure your local machine has the tools necessa
 brew install pre-commit
 pre-commit install --install-hooks
 ```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+No modules.
+
+## Resources
+
+No resources.
+
+## Inputs
+
+No inputs.
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
