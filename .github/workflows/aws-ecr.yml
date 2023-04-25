@@ -8,6 +8,11 @@ name: Automate Docker Build Push to AWS ECR
 
 on:
   workflow_call:
+    secrets:
+      GHA_ECR_ROLE_ASSUMPTION:
+        required: true
+      ECR_REPOSITORY:
+        required: true
   push:
     paths-ignore:
       - "docs/**"
@@ -15,6 +20,7 @@ on:
     branches: [main]
 permissions:
   id-token: write
+  actions: read
   contents: read
 
 jobs:
