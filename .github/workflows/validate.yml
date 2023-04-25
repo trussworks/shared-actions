@@ -2,10 +2,9 @@ name: Validate - Pre-Commit
 
 on:
   workflow_call:
-    inputs:
-      slack-webhook-url:
+    secrets:
+      SLACK_WEBHOOK_URL:
         required: true
-        type: string
   pull_request:
   push:
     branches: [main]
@@ -26,5 +25,5 @@ jobs:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
         env:
-          SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: failure() && ${{ github.actor }} == renovate
