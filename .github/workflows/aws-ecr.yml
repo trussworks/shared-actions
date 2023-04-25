@@ -8,6 +8,11 @@ name: Automate Docker Build Push to AWS ECR
 
 on:
   workflow_call:
+    secrets:
+      GHA_ECR_ROLE_ASSUMPTION:
+        required: true
+      ECR_REPOSITORY:
+        required: true
   push:
     paths-ignore:
       - "docs/**"
@@ -15,6 +20,7 @@ on:
     branches: [main]
 permissions:
   id-token: write
+  actions: read
   contents: read
 
 jobs:
@@ -49,7 +55,7 @@ jobs:
           fi
           BUILD_TIME=$(date '+%Y%m%d%H%M%S')
           IMAGE_TAG="${BRANCH_PREFIX}-${GIT_COMMIT}-${BUILD_TIME}"
-          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
           echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
       - uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2
