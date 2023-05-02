@@ -7,7 +7,11 @@
 name: Automate Docker Build Push to AWS ECR
 
 on:
-  workflow_call:
+workflow_call:
+  inputs:
+    image_tag:
+      required: false
+      type: string
     secrets:
       GHA_ECR_ROLE_ASSUMPTION:
         required: true
@@ -46,6 +50,7 @@ jobs:
           GIT_COMMIT: ${{ github.sha }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
+          INPUT_IMAGE_TAG: ${{ inputs.image_tag }}
         shell: bash
         run: |
           BRANCH_PREFIX="$GIT_BRANCH"
@@ -54,7 +59,8 @@ jobs:
             BRANCH_PREFIX="branch"
           fi
           BUILD_TIME=$(date '+%Y%m%d%H%M%S')
-          IMAGE_TAG="${BRANCH_PREFIX}-${GIT_COMMIT}-${BUILD_TIME}"
+          DEFAULT_IMAGE_TAG="${BRANCH_PREFIX}-${GIT_COMMIT}-${BUILD_TIME}"
+          IMAGE_TAG="${INPUT_IMAGE_TAG:-$DEFAULT_IMAGE_TAG}"
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
           echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
