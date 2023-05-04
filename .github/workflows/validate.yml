@@ -1,15 +1,13 @@
-name: Validate - Pre-Commit
+name: validate
 
 on:
-  workflow_call:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-      - uses: pre-commit/action@v3.0.0
+  validate:
+    uses: trussworks/shared-actions/.github/workflows/validate-python.yml@validate-python
