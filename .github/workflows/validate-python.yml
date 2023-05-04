@@ -28,8 +28,8 @@ jobs:
       - uses: abatilo/actions-poetry@v2
         with:
           poetry-version: ${{ inputs.poetry-version }}
-      - name: Build and Install with Poetry
-        run: poetry build && poetry install
+      - name: Install with Poetry
+        run: poetry install
       - uses: pre-commit/action@v3.0.0
       - name: Run Python tests
         run: poetry run pytest --full-trace
