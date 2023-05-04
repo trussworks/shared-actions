@@ -1,0 +1,35 @@
+name: Validate - Pre-Commit
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        description: "The Python version the workflow should run"
+        default: "3.11"
+        required: false
+        type: string
+      poetry_version:
+        description: "The Poetry version the workflow should run"
+        default: "1.4.2"
+        required: false
+        type: string
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python_version }}
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ inputs.poetry_version }}
+      - name: Build and Install with Poetry
+        run: poetry build && poetry install
+      - uses: pre-commit/action@v3.0.0
+      - name: Run Python tests
+        run: poetry run pytest --full-trace
