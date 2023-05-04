@@ -13,9 +13,6 @@ on:
         default: "1.4.2"
         required: false
         type: string
-  pull_request:
-  push:
-    branches: [main]
 
 jobs:
   pre-commit:
