@@ -1,13 +1,11 @@
 name: validate
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
-  validate:
-    uses: trussworks/shared-actions/.github/workflows/validate-python.yml@validate-python
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pre-commit/action@v3.0.0
