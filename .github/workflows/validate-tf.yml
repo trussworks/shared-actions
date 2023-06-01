@@ -2,9 +2,9 @@ name: Validate - Terraform
 
 on:
   workflow_call:
-  pull_request:
-  push:
-    branches: [main]
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN:
+        required: true
 
 jobs:
   validate-tf:
