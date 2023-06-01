@@ -30,7 +30,7 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-          token: ${{ steps.load-pat-secret.outputs.PAT_SECRET }}
+          token: ${{ env.PAT_SECRET }}
 
       - name: Render terraform docs and push changes back to PR
         uses: terraform-docs/gh-actions@main
