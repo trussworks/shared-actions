@@ -43,5 +43,6 @@ jobs:
       - uses: pre-commit/action@v3.0.0
 
       - uses: stefanzweifel/git-auto-commit-action@v4
+        if: ${{ failure() }}
         with:
           commit_message: Commit changes made by pre-commit
