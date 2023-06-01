@@ -24,7 +24,7 @@ jobs:
         id: load-pat-secret
         uses: 1password/load-secrets-action@v1
         env:
-          PAT_SECRET: op://Infra/"Github - trussworks-infra"/validate-tf-token
+          PAT_SECRET: op://Infra/"Github - trussworks-infra"/credentials/validate-tf-token
 
       - uses: actions/checkout@v3
         with:
