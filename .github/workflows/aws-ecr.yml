@@ -12,7 +12,7 @@ on:
       aws-region:
         type: string
         required: false
-        description: "The region the ECR repo is located."
+        description: "The region where the ECR repo is located."
         default: "us-west-2"
     secrets:
       GHA_ECR_ROLE_ASSUMPTION:
