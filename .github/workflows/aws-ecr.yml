@@ -8,16 +8,17 @@ name: Automate Docker Build Push to AWS ECR
 
 on:
   workflow_call:
+    inputs:
+      aws-region:
+        type: string
+        required: false
+        description: "The region where the ECR repo is located."
+        default: "us-west-2"
     secrets:
       GHA_ECR_ROLE_ASSUMPTION:
         required: true
       ECR_REPOSITORY:
         required: true
-  push:
-    paths-ignore:
-      - "docs/**"
-      - "**.md**"
-    branches: [main]
 permissions:
   id-token: write
   actions: read
@@ -32,7 +33,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # tag=v2
         with:
-          aws-region: us-west-2
+          aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ secrets.GHA_ECR_ROLE_ASSUMPTION }}
 
       - name: Login to Amazon ECR
