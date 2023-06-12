@@ -8,25 +8,32 @@ name: Automate Docker Build Push to AWS ECR
 
 on:
   workflow_call:
-  push:
-    paths-ignore:
-      - "docs/**"
-      - "**.md**"
-    branches: [main]
+    inputs:
+      aws-region:
+        type: string
+        required: false
+        description: "The region where the ECR repo is located."
+        default: "us-west-2"
+    secrets:
+      GHA_ECR_ROLE_ASSUMPTION:
+        required: true
+      ECR_REPOSITORY:
+        required: true
 permissions:
   id-token: write
+  actions: read
   contents: read
 
 jobs:
   build-and-push-dev-aws:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # tag=v3.5.2
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@e1e17a757e536f70e52b5a12b2e8d1d1c60e04ef # tag=v2
+        uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2
         with:
-          aws-region: us-west-2
+          aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ secrets.GHA_ECR_ROLE_ASSUMPTION }}
 
       - name: Login to Amazon ECR
@@ -49,16 +56,16 @@ jobs:
           fi
           BUILD_TIME=$(date '+%Y%m%d%H%M%S')
           IMAGE_TAG="${BRANCH_PREFIX}-${GIT_COMMIT}-${BUILD_TIME}"
-          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          IMAGE_URI="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
           echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
-      - uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2
+      - uses: docker/setup-buildx-action@6a58db7e0d21ca03e6c44877909e80e45217eed2 # v2
         id: buildx
         with:
           install: true
 
       - name: Build and push
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # tag=v4
+        uses: docker/build-push-action@44ea916f6c540f9302d50c2b1e5a8dc071f15cdf # v4
         with:
           context: .
           push: true

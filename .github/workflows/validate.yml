@@ -1,13 +1,10 @@
-name: Validate - Pre-Commit
+name: validate
 
 on:
   workflow_call:
     secrets:
       SLACK_WEBHOOK_URL:
         required: true
-  pull_request:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -18,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
       - uses: pre-commit/action@v3.0.0
       - uses: 8398a7/action-slack@v3
         if: ${{ failure() && github.event.issue.user.login == 'renovate[bot]' }}
