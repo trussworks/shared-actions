@@ -2,6 +2,13 @@ name: validate
 
 on:
   workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   pre-commit:
@@ -9,3 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: pre-commit/action@v3.0.0
+      - uses: 8398a7/action-slack@v3
+        if: ${{ failure() && github.event.pull_request.user.login == 'renovate[bot]' }}
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

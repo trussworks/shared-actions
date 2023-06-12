@@ -19,7 +19,7 @@ brew install pre-commit
 pre-commit install --install-hooks
 ```
 
-## Creating New Workflows
+## Creating New Reusable Workflows
 
 - Make sure to add `workflow_call` as a trigger for the workflow.
 - [Disable the workflow manually](https://docs.github.com/en/actions/managing-workflow-runs/disabling-and-enabling-a-workflow?tool=cli) as it isn't necessarily relevant to this repo.
