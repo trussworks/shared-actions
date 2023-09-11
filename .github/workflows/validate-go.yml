@@ -24,7 +24,7 @@ jobs:
         with:
           go-version: ${{ inputs.go-version }}
       - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v4
+        uses: goreleaser/goreleaser-action@v5
         with:
           install-only: true
       - name: Show GoReleaser version
