@@ -27,6 +27,6 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
       - name: Install with Poetry
         run: poetry install
-      - uses: pre-commit/action@v3.0.0
+      - uses: pre-commit/action@v3.0.1
       - name: Run Python tests
         run: poetry run pytest --full-trace
