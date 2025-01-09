@@ -59,7 +59,7 @@ jobs:
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
           echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
-      - uses: docker/setup-buildx-action@885d1462b80bc1c1c7f0b00334ad271f09369c55 # v2
+      - uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 # v3
         id: buildx
         with:
           install: true
