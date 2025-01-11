@@ -20,13 +20,6 @@ jobs:
           tar -xzf terraform-docs.tar.gz
           chmod +x terraform-docs
           sudo mv terraform-docs /usr/local/bin/
-      - name: Render terraform docs and push changes back to PR
-        uses: terraform-docs/gh-actions@v1.3.0
-        with:
-          working-dir: .
-          output-file: README.md
-          output-method: inject
-          git-push: "true"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
