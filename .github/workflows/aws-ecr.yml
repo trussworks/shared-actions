@@ -28,10 +28,10 @@ jobs:
   build-and-push-dev-aws:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 #v5.0.0
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a #v4.3.1
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ secrets.GHA_ECR_ROLE_ASSUMPTION }}
@@ -59,13 +59,13 @@ jobs:
           IMAGE_URI="${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
           echo "image-uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
-      - uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3
+      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 #v3.11.1
         id: buildx
         with:
           install: true
 
       - name: Build and push
-        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 #v6.18.0
         with:
           context: .
           push: true
