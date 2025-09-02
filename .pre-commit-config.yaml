@@ -22,7 +22,7 @@ repos:
         name: "Markdown Lint"
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.31.1
+    rev: 0.33.3
     hooks:
       - id: check-github-actions
         name: validate github actions
